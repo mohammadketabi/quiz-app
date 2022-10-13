@@ -173,7 +173,6 @@ const QuestionsScreen = () => {
                 </Button>
               </Grid>
               <Grid item>
-                {" "}
                 <Button
                   variant="contained"
                   color="primary"
