@@ -20,14 +20,26 @@
 }
 
 .question_label {
-  padding-bottom: 25px;
+  margin-bottom: 10px;
   font-size: 20px;
   text-transform: uppercase;
+  font-family: "Montserrat", sans-serif !important;
+  color: #182747 !important;
+}
+
+.active,
+.deactive {
+  width: 100%;
+  margin: 2.5px 0;
 }
 
 .active {
-  width: 100%;
-  border: 1px solid black !important;
-  border-radius: 5px;
-  margin-bottom: 15px;
+  border: 1px solid #182747;
+  border-radius: 6px;
+  background-color: #18274721;
+}
+
+.active span,
+.deactive span {
+  font-family: "Montserrat", sans-serif !important;
 }

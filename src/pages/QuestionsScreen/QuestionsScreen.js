@@ -13,14 +13,16 @@ import React, { useState } from "react";
 import styles from "./QuestionsScreen.module.css";
 
 const QuestionsScreen = () => {
-  const [active, setActive] = useState(false);
+  const [optionChosen, setOptionChosen] = useState("");
 
-  const handleChange = () => {
-    setActive(true);
+  const chooseOption = (option) => {
+    setOptionChosen(option);
   };
 
+  console.log(optionChosen);
+
   return (
-    <Grid container xs={12} className={styles.question_container}>
+    <Grid container className={styles.question_container}>
       <Grid item xs={12} mb={5}>
         <Typography
           align="center"
@@ -31,10 +33,20 @@ const QuestionsScreen = () => {
         </Typography>
       </Grid>
       <Grid container className={styles.question_second_container}>
-        <Grid item xs={12} sm={12} md={6} pr={3}>
-          <Typography variant="h6">Sample Question</Typography>
+        <Grid item xs={12} sm={12} md={6} padding={2}>
+          <Typography variant="body" lineHeight={1.5}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not
+            only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s
+            with the release of Letraset sheets containing Lorem Ipsum passages,
+            and more recently with desktop publishing software like Aldus
+            PageMaker including versions of Lorem Ipsum
+          </Typography>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} pl={3}>
+        <Grid item xs={12} sm={12} md={6} padding={2}>
           <FormControl fullWidth>
             <FormLabel
               id="demo-radio-buttons-group-label"
@@ -48,32 +60,48 @@ const QuestionsScreen = () => {
               name="radio-buttons-group"
             >
               <FormControlLabel
-                className={active ? "active" : "no_active"}
+                className={
+                  optionChosen === "optionA" ? styles.active : styles.deactive
+                }
                 value="sample answer 1"
                 control={<Radio />}
                 label="sample answer 1"
-                onChange={handleChange}
+                onClick={() => {
+                  chooseOption("optionA");
+                }}
               />
               <FormControlLabel
-                className={active ? "active" : "no_active"}
+                className={
+                  optionChosen === "optionB" ? styles.active : styles.deactive
+                }
                 value="sample answer 2"
                 control={<Radio />}
                 label="sample answer 2"
-                onChange={handleChange}
+                onClick={() => {
+                  chooseOption("optionB");
+                }}
               />
               <FormControlLabel
-                className={active ? "active" : "no_active"}
+                className={
+                  optionChosen === "optionC" ? styles.active : styles.deactive
+                }
                 value="sample answer 3"
                 control={<Radio />}
                 label="sample answer 3"
-                onChange={handleChange}
+                onClick={() => {
+                  chooseOption("optionC");
+                }}
               />
               <FormControlLabel
-                className={active ? "active" : "no_active"}
+                className={
+                  optionChosen === "optionD" ? styles.active : styles.deactive
+                }
                 value="sample answer 4"
                 control={<Radio />}
                 label="sample answer 4"
-                onChange={handleChange}
+                onClick={() => {
+                  chooseOption("optionD");
+                }}
               />
             </RadioGroup>
           </FormControl>
