@@ -19,7 +19,7 @@
 }
 
 .question_btn {
-  width: 300px;
+  width: 250px;
   height: 50px;
 }
 
@@ -46,4 +46,14 @@
 .active span,
 .deactive span {
   font-family: "Montserrat", sans-serif !important;
+}
+
+.hint {
+  color: gray;
+  margin-top: 20px !important;
+}
+
+.question_hint {
+  display: flex;
+  flex-direction: column !important;
 }

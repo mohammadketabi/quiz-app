@@ -38,7 +38,9 @@ const QuestionsScreen = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [options, setOptions] = useState([]);
   const [optionChosen, setOptionChosen] = useState("");
+  const [correctAnswer, setCorrectAnswer] = useState("");
   const [valueSelected, setValueSelected] = useState("");
+  const [hint, setHint] = useState(false);
 
   useEffect(() => {
     if (response?.results.length) {
@@ -50,6 +52,7 @@ const QuestionsScreen = () => {
         question.correct_answer
       );
       setOptions(answers);
+      setCorrectAnswer(question.correct_answer);
     }
   }, [response, questionIndex]);
 
@@ -71,11 +74,14 @@ const QuestionsScreen = () => {
     if (questionIndex + 1 < response.results.length) {
       setQuestionIndex(questionIndex + 1);
       setValueSelected(null);
+      setHint(false);
     } else {
       history.push("/result");
     }
+  };
 
-    console.log(score);
+  const handleHint = () => {
+    setHint(true);
   };
 
   return (
@@ -96,10 +102,22 @@ const QuestionsScreen = () => {
             </Typography>
           </Grid>
           <Grid container className={styles.question_second_container}>
-            <Grid item xs={12} sm={12} md={6} padding={2}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={6}
+              padding={2}
+              className={styles.question_hint}
+            >
               <Typography variant="body" lineHeight={1.5}>
                 {decode(response.results[questionIndex].question)}
               </Typography>
+              {hint ? (
+                <Typography variant="caption" className={styles.hint}>
+                  The Answer is: {decode(correctAnswer)}
+                </Typography>
+              ) : null}
             </Grid>
             <Grid item xs={12} sm={12} md={6} padding={2}>
               <FormControl fullWidth>
@@ -133,16 +151,40 @@ const QuestionsScreen = () => {
               </FormControl>
             </Grid>
           </Grid>
-          <Grid item xs={12} display="flex" justifyContent="center" mt={5}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              className={styles.question_btn}
-              type="submit"
+          <Grid item>
+            <Grid
+              container
+              xs={12}
+              display="flex"
+              justifyContent="space-evenly"
+              mt={5}
+              spacing={1}
             >
-              Next
-            </Button>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  className={styles.question_btn}
+                  type="button"
+                  onClick={handleHint}
+                >
+                  Hint
+                </Button>
+              </Grid>
+              <Grid item>
+                {" "}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  className={styles.question_btn}
+                  type="submit"
+                >
+                  Next
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </form>
       )}
