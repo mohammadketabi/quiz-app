@@ -1,11 +1,14 @@
-.title {
-  font-family: "Montserrat", sans-serif !important;
+.welcome_container {
+  background-color: #f2f2f2;
+  padding: 50px;
+  border-radius: 20px;
+  max-width: 600px;
+  margin: 20px;
+  justify-content: center;
 }
 
-.button_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.title {
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .button {

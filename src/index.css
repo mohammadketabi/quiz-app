@@ -7,9 +7,7 @@ body {
 }
 
 .container {
-  margin-top: 70px;
-  display: flex !important;
+  align-content: space-between;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }

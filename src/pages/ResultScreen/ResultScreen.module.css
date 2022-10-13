@@ -1,9 +1,19 @@
+.result_container {
+  background-color: #f2f2f2;
+  padding: 50px;
+  border-radius: 20px;
+  max-width: 600px;
+  margin: 20px;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
 .score_title {
   font-family: "Montserrat", sans-serif !important;
+  margin-bottom: 30px !important;
 }
 
 .score_btn {
   width: 300px;
   height: 50px;
-  margin-top: 30px;
 }

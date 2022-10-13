@@ -2,6 +2,10 @@
   background-color: #f2f2f2;
   padding: 50px;
   border-radius: 20px;
+  max-width: 1200px;
+  margin: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
 .question_second_container {

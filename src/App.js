@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Grid } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "./components/Header/Header";
 import WelcomeScreen from "./pages/WelcomeScreen/WelcomeScreen";
@@ -22,8 +22,8 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Header />
-        <Container className="container">
+        <Grid container className="container">
+          <Header />
           <Switch>
             <Route path="/" exact>
               <WelcomeScreen />
@@ -35,8 +35,8 @@ function App() {
               <ResultScreen />
             </Route>
           </Switch>
-        </Container>
-        <Footer />
+          <Footer />
+        </Grid>
       </ThemeProvider>
     </Router>
   );

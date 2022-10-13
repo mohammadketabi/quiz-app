@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -8,115 +10,142 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { decode } from "html-entities";
+
+import useAxios from "../../hooks/useAxios";
+import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./QuestionsScreen.module.css";
+import { useHistory } from "react-router-dom";
+
+import { handleScoreChange } from "../../redux/actions";
+
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * Math.floor(max));
+};
 
 const QuestionsScreen = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const { question_category, score } = useSelector((state) => state);
+
+  let apiUrl = `/api.php?amount=10&category=${question_category}&difficulty=easy&type=multiple`;
+
+  const { response, loading } = useAxios({ url: apiUrl });
+
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [options, setOptions] = useState([]);
   const [optionChosen, setOptionChosen] = useState("");
+  const [valueSelected, setValueSelected] = useState("");
+
+  useEffect(() => {
+    if (response?.results.length) {
+      const question = response.results[questionIndex];
+      let answers = [...question.incorrect_answers];
+      answers.splice(
+        getRandomInt(question.incorrect_answers.length),
+        0,
+        question.correct_answer
+      );
+      setOptions(answers);
+    }
+  }, [response, questionIndex]);
+
+  const handleRadioChange = (event) => {
+    setValueSelected(event.target.value);
+  };
 
   const chooseOption = (option) => {
     setOptionChosen(option);
   };
 
-  console.log(optionChosen);
+  const handleSubmitQuestion = (event) => {
+    event.preventDefault();
+    if (!valueSelected) return;
+    const question = response.results[questionIndex];
+    if (valueSelected === question.correct_answer) {
+      dispatch(handleScoreChange(score + 1));
+    }
+    if (questionIndex + 1 < response.results.length) {
+      setQuestionIndex(questionIndex + 1);
+      setValueSelected(null);
+    } else {
+      history.push("/result");
+    }
+
+    console.log(score);
+  };
 
   return (
     <Grid container className={styles.question_container}>
-      <Grid item xs={12} mb={5}>
-        <Typography
-          align="center"
-          variant="h4"
-          className={styles.question_title}
-        >
-          Question 1
-        </Typography>
-      </Grid>
-      <Grid container className={styles.question_second_container}>
-        <Grid item xs={12} sm={12} md={6} padding={2}>
-          <Typography variant="body" lineHeight={1.5}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} padding={2}>
-          <FormControl fullWidth>
-            <FormLabel
-              id="demo-radio-buttons-group-label"
-              className={styles.question_label}
+      {loading ? (
+        <Box>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <form onSubmit={handleSubmitQuestion}>
+          <Grid item xs={12} mb={5}>
+            <Typography
+              align="center"
+              variant="h4"
+              className={styles.question_title}
             >
-              SELECT ONLY ONE
-            </FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="female"
-              name="radio-buttons-group"
+              Question {questionIndex + 1}
+            </Typography>
+          </Grid>
+          <Grid container className={styles.question_second_container}>
+            <Grid item xs={12} sm={12} md={6} padding={2}>
+              <Typography variant="body" lineHeight={1.5}>
+                {decode(response.results[questionIndex].question)}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} padding={2}>
+              <FormControl fullWidth>
+                <FormLabel
+                  id="demo-radio-buttons-group-label"
+                  className={styles.question_label}
+                >
+                  SELECT ONLY ONE
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="female"
+                  name="radio-buttons-group"
+                >
+                  {options.map((data, id) => (
+                    <FormControlLabel
+                      key={id}
+                      className={
+                        optionChosen === data ? styles.active : styles.deactive
+                      }
+                      value={data}
+                      control={<Radio />}
+                      label={decode(data)}
+                      onClick={() => {
+                        chooseOption(data);
+                      }}
+                      onChange={handleRadioChange}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} display="flex" justifyContent="center" mt={5}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              className={styles.question_btn}
+              type="submit"
             >
-              <FormControlLabel
-                className={
-                  optionChosen === "optionA" ? styles.active : styles.deactive
-                }
-                value="sample answer 1"
-                control={<Radio />}
-                label="sample answer 1"
-                onClick={() => {
-                  chooseOption("optionA");
-                }}
-              />
-              <FormControlLabel
-                className={
-                  optionChosen === "optionB" ? styles.active : styles.deactive
-                }
-                value="sample answer 2"
-                control={<Radio />}
-                label="sample answer 2"
-                onClick={() => {
-                  chooseOption("optionB");
-                }}
-              />
-              <FormControlLabel
-                className={
-                  optionChosen === "optionC" ? styles.active : styles.deactive
-                }
-                value="sample answer 3"
-                control={<Radio />}
-                label="sample answer 3"
-                onClick={() => {
-                  chooseOption("optionC");
-                }}
-              />
-              <FormControlLabel
-                className={
-                  optionChosen === "optionD" ? styles.active : styles.deactive
-                }
-                value="sample answer 4"
-                control={<Radio />}
-                label="sample answer 4"
-                onClick={() => {
-                  chooseOption("optionD");
-                }}
-              />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} display="flex" justifyContent="center" mt={5}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          className={styles.question_btn}
-        >
-          Next
-        </Button>
-      </Grid>
+              Next
+            </Button>
+          </Grid>
+        </form>
+      )}
     </Grid>
   );
 };
